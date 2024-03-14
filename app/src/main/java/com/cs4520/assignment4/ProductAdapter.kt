@@ -1,16 +1,18 @@
 package com.cs4520.assignment4
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.cs4520.assignment4.databinding.ProductItemBinding
 
-class ProductAdapter(private val products: List<Product>):RecyclerView.Adapter<ProductViewHolder>() {
+class ProductAdapter(private val products: List<Product>,
+                     private val container: ViewGroup?):RecyclerView.Adapter<ProductViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.product_item, parent, false)
-        return ProductViewHolder(view)
+        val inflater = LayoutInflater.from(parent.context)
+        val productItemBinding: ProductItemBinding = ProductItemBinding.inflate(inflater,container, false)
+        return ProductViewHolder(productItemBinding)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
@@ -36,9 +38,9 @@ class ProductAdapter(private val products: List<Product>):RecyclerView.Adapter<P
     }
 }
 
-class ProductViewHolder(productView: View): RecyclerView.ViewHolder(productView) {
-    val name: TextView = itemView.findViewById(R.id.name)
-    val type: ImageView = itemView.findViewById(R.id.type)
-    val expiryDate: TextView = itemView.findViewById(R.id.expiryDate)
-    val price: TextView = itemView.findViewById(R.id.price)
+class ProductViewHolder(productItemBinding: ProductItemBinding): RecyclerView.ViewHolder(productItemBinding.root) {
+    val name:TextView = productItemBinding.name
+    val type:ImageView = productItemBinding.type
+    val expiryDate: TextView = productItemBinding.expiryDate
+    val price: TextView = productItemBinding.price
 }
