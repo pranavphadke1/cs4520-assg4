@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs4520.assignment4.databinding.ProductListViewBinding
@@ -20,11 +21,20 @@ class ProductListFragment:Fragment(R.layout.product_list_view) {
         super.onCreateView(inflater, container, savedInstanceState);
         _product_list_binding = ProductListViewBinding.inflate(inflater, container, false)
 
-        val products = productsDataset.map{Product(it)}
+        val products = null
+        val viewModel = ViewModel()
 
         val recyclerView:RecyclerView = _product_list_binding!!.recyclerView
-        recyclerView.adapter = ProductAdapter(products,container)
+        val productAdapter = ProductAdapter(products,container)
+        recyclerView.adapter = productAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
+
+        viewModel.productList.observe(viewLifecycleOwner, Observer { res ->
+            productAdapter.setProducts(res)
+            productAdapter.notifyDataSetChanged()
+        })
+
+        viewModel.fetchProducts()
         return product_list_binding.root
     }
 }

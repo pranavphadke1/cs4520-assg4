@@ -7,20 +7,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.cs4520.assignment4.databinding.ProductItemBinding
 
-class ProductAdapter(private val products: List<Product>,
+class ProductAdapter(private var products: ProductList?,
                      private val container: ViewGroup?):RecyclerView.Adapter<ProductViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val productItemBinding: ProductItemBinding = ProductItemBinding.inflate(inflater,container, false)
+        val productItemBinding: ProductItemBinding =
+            ProductItemBinding.inflate(inflater, container, false)
         return ProductViewHolder(productItemBinding)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        val product = products[position]
+        val product = products!![position]
         holder.name.text = product.name
         val text = product.expiryDate ?: ""
         holder.expiryDate.text = text
-        if (text == ""){
+        if (text == "") {
             holder.expiryDate.visibility = TextView.GONE
         }
         holder.price.text = "$ " + product.price.toString()
@@ -33,10 +34,16 @@ class ProductAdapter(private val products: List<Product>,
         }
     }
 
+    fun setProducts(productList: ProductList) {
+        products = productList
+    }
+
+
     override fun getItemCount(): Int {
-        return products.size
+        return products?.size ?: 0
     }
 }
+
 
 class ProductViewHolder(productItemBinding: ProductItemBinding): RecyclerView.ViewHolder(productItemBinding.root) {
     val name:TextView = productItemBinding.name
