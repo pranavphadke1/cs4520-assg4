@@ -30,8 +30,20 @@ class ProductListFragment:Fragment(R.layout.product_list_view) {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         viewModel.productList.observe(viewLifecycleOwner, Observer { res ->
-            productAdapter.setProducts(res)
-            productAdapter.notifyDataSetChanged()
+            _product_list_binding!!.pBar.visibility = View.GONE
+            if (res == null){
+                _product_list_binding!!.errorText.visibility = View.VISIBLE
+                _product_list_binding!!.errorText.text = getString(R.string.no_result)
+            }
+            else if (res.size == 0) {
+                _product_list_binding!!.errorText.visibility = View.VISIBLE
+                _product_list_binding!!.errorText.text = getString(R.string.no_products)
+            }
+            else{
+
+                productAdapter.setProducts(res)
+                productAdapter.notifyDataSetChanged()
+            }
         })
 
         viewModel.fetchProducts()
