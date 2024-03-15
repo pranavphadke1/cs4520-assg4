@@ -47,8 +47,11 @@ class ProductListFragment:Fragment(R.layout.product_list_view) {
                 _product_list_binding!!.errorText.text = getString(R.string.no_products)
             }
             else{
+                val productList:ProductList = ProductList()
+                for (p in res.distinct())
+                    productList.add(p)
 
-                productAdapter.setProducts(res)
+                productAdapter.setProducts(productList)
                 productAdapter.notifyDataSetChanged()
             }
         })
